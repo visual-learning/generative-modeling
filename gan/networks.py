@@ -115,7 +115,7 @@ class Generator(jit.ScriptModule):
     # TODO 1.1: Impement Generator. Follow the architecture described below:
     """
     Generator(
-    (dense): Linear(in_features=128, out_features=4096, bias=True)
+    (dense): Linear(in_features=128, out_features=2048, bias=True)
     (layers): Sequential(
         (0): ResBlockUp(
         (layers): Sequential(
