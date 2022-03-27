@@ -245,5 +245,5 @@ class Discriminator(jit.ScriptModule):
     @jit.script_method
     def forward(self, x):
         # TODO 1.1: Forward the discriminator assuming a batch of images have been passed in.
-        # Make sure to flatten the output of the convolutional layers before passing to the output layer!
+        # Make sure to flatten the output of the convolutional layers and sum across the image dimensions before passing to the output layer!
         pass
