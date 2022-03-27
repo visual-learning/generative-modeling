@@ -1,0 +1,6 @@
+gan/data_gan/
+gan/data_ls_gan/
+gan/data_wgan_gp/
+gan/datasets/
+
+__pycache__
