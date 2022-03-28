@@ -85,7 +85,11 @@ Additionally, implement the interpolated batch (which is necessary for the loss)
 * If this section was implemented correctly, you should have a final FID in the ballpark of *50* and the samples should look reasonable at this point (you should see some birds that look reasonable). In your own words, describe why you think this version of the GAN loss was so much more stable and performant than the previous two.
 
 ### Debugging Tips
-1. Run export PYTORCH_JIT=0 when debugging. This will disable JIT, which will slow down the code but enable you to use pdb to debug.
+1. Run export PYTORCH_JIT=0 when debugging. This will disable JIT, which will slow down the code but enable you to use pdb to debug. In Jupyter notebooks, you can add the following cell to do the same (make sure to do this at the top of the file): 
+```
+import os
+os.environ["PYTORCH_JIT"] = "0"
+```
 2. GAN losses are pretty much meaningless! If you want to understand if your network is learning, visualize the samples. The FID score should generally be going down as well.
 3. Don't change the hyper-parameters at all, they have been carefully tuned to ensure the networks will train stably, if things aren't working its a bug in your code.
 
