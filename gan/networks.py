@@ -20,7 +20,7 @@ class UpSampleConv2D(jit.ScriptModule):
     @jit.script_method
     def forward(self, x):
         # TODO 1.1: Implement nearest neighbor upsampling
-        # 1. Stack x channel wise upscale_factor^2 times
+        # 1. Duplicate x channel wise upscale_factor^2 times 
         # 2. Then re-arrange to form a batch x channel x height*upscale_factor x width*upscale_factor
         # 3. Apply convolution.
         # Hint for 2. look at
