@@ -19,9 +19,9 @@ class UpSampleConv2D(jit.ScriptModule):
 
     @jit.script_method
     def forward(self, x):
-        # TODO 1.1: Implement nearest neighbor upsampling
-        # 1. Duplicate x channel wise upscale_factor^2 times 
-        # 2. Then re-arrange to form a batch x channel x height*upscale_factor x width*upscale_factor
+        # TODO 1.1: Implement nearest neighbor upsampling.
+        # 1. Duplicate x channel wise upscale_factor^2 times.
+        # 2. Then re-arrange to form an image of shape (batch x channel x height*upscale_factor x width*upscale_factor).
         # 3. Apply convolution.
         # Hint for 2. look at
         # https://pytorch.org/docs/master/generated/torch.nn.PixelShuffle.html#torch.nn.PixelShuffle
@@ -38,10 +38,10 @@ class DownSampleConv2D(jit.ScriptModule):
 
     @jit.script_method
     def forward(self, x):
-        # TODO 1.1: Implement spatial mean pooling
-        # 1. Re-arrange to form a batch x channel * upscale_factor^2 x height x width
-        # 2. Then split channel wise into batch x channel x height x width Images
-        # 3. average the images into one and apply convolution
+        # TODO 1.1: Implement spatial mean pooling.
+        # 1. Re-arrange to form an image of shape: (batch x channel * upscale_factor^2 x height x width).
+        # 2. Then split channel wise into upscale_factor^2 number of images of shape: (batch x channel x height x width).
+        # 3. Average the images into one and apply convolution.
         # Hint for 1. look at
         # https://pytorch.org/docs/master/generated/torch.nn.PixelUnshuffle.html#torch.nn.PixelUnshuffle
         pass
