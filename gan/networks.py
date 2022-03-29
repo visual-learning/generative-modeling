@@ -62,7 +62,7 @@ class ResBlockUp(jit.ScriptModule):
             (conv): Conv2d(n_filters, n_filters, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
         )
         (shortcut): UpSampleConv2D(
-            (conv): Conv2d(n_filters, n_filters, kernel_size=(1, 1), stride=(1, 1))
+            (conv): Conv2d(in_channels, n_filters, kernel_size=(1, 1), stride=(1, 1))
         )
     """
 
@@ -78,6 +78,21 @@ class ResBlockUp(jit.ScriptModule):
 
 class ResBlockDown(jit.ScriptModule):
     # TODO 1.1: Impement Residual Block Downsampler.
+    """
+    ResBlockDown(
+        (layers): Sequential(
+            (0): ReLU()
+            (1): Conv2d(in_channels, n_filters, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+            (2): ReLU()
+        )
+        (residual): DownSampleConv2D(
+            (conv): Conv2d(n_filters, n_filters, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        )
+        (shortcut): DownSampleConv2D(
+            (conv): Conv2d(in_channels, n_filters, kernel_size=(1, 1), stride=(1, 1))
+        )
+    )
+    """
 
     def __init__(self, input_channels, kernel_size=3, n_filters=128):
         super(ResBlockDown, self).__init__()
