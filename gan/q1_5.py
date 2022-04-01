@@ -10,7 +10,7 @@ def compute_discriminator_loss(
     discrim_real, discrim_fake, discrim_interp, interp, lamb
 ):
     # TODO 1.5.1: Implement WGAN-GP loss for discriminator.
-    # loss = E[D(fake_data)] - E[D(real_data)] + lambda * E[(|| grad wrt interpolated_data (D(interpolated_data))|| - 1)^2]
+    # loss = E[D(fake_data)] - E[D(real_data)] - lambda * E[(|| grad wrt interpolated_data (D(interpolated_data))|| - 1)^2]
     return loss
 
 
