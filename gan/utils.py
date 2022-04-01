@@ -30,9 +30,10 @@ def get_fid(gen, dataset_name, dataset_resolution, z_dimension, batch_size, num_
 @torch.no_grad()
 def interpolate_latent_space(gen, path):
     # TODO 1.2: Generate and save out latent space interpolations.
-    # Concretely, for the first two dimensions of the latent space
-    # generate a grid of points that range from -1 to 1 on each dimension (10 points for each dimension).
-    # hold the rest of z to be some fixed random value. Forward the generated samples through the generator
-    # and save out an image holding all 100 samples.
-    # use torchvision.utils.save_image to save out the visualization.
+    # Generate 100 samples of 128-dim vectors
+    # Linearly interpolate the first two dimensions between -1 and 1. 
+    # Keep the rest of the z vector for the samples to be some fixed value. 
+    # Forward the samples through the generator.
+    # Save out an image holding all 100 samples.
+    # Use torchvision.utils.save_image to save out the visualization.
     pass
