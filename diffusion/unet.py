@@ -1,3 +1,4 @@
+# Adapted from: https://github.com/lucidrains/denoising-diffusion-pytorch
 from collections import namedtuple
 import math
 from functools import partial
@@ -6,10 +7,6 @@ from einops import rearrange, reduce
 import torch
 from torch import nn, einsum
 import torch.nn.functional as F
-
-
-# constants
-ModelPrediction =  namedtuple('ModelPrediction', ['pred_noise', 'pred_x_start'])
 
 
 # helpers functions

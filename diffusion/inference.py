@@ -1,3 +1,7 @@
+"""
+Created for 16-824
+by Anirudh Chakravarthy (achakrav@cs.cmu.edu) and Vanshaj Chowdhary (vanshajc@andrew.cmu.edu), 2022.
+"""
 import argparse
 import os
 import torch
@@ -7,47 +11,21 @@ from unet import Unet
 from utils import save_samples
 
 
-parser = argparse.ArgumentParser(description='Diffusion Model Inference')
-parser.add_argument('--ckpt', required=True, type=str, help="Pretrained checkpoint")
-parser.add_argument('--num-images', default=8, type=int, help="Number of images per iteration")
-parser.add_argument('--sampling-method', default="ddpm", type=str, help="Sampling method (ddpm vs ddim")
-args = parser.parse_args()
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Diffusion Model Inference')
+    parser.add_argument('--ckpt', required=True, type=str, help="Pretrained checkpoint")
+    parser.add_argument('--num-images', default=8, type=int, help="Number of images per iteration")
+    parser.add_argument('--image-size', default=32, type=int, help="Image size to generate")
+    parser.add_argument('--sampling-method', choices=['ddpm', 'ddim'])
+    parser.add_argument('--ddim-timesteps', type=int, default=25, help="Number of timesteps to sample for DDIM")
+    parser.add_argument('--ddim-eta', type=int, default=1, help="Eta for DDIM")
+    args = parser.parse_args()
 
-
-@torch.no_grad()
-def ddim_sample(diffusion_model, num_images=8, image_size=32):
-    """
-    Use the reverse sampling process from DDIM to go from 
-    a tensor of noise to a generated image.
-
-    TODO (Q3.2.1): fill `ddim_sample`
-    """
-    num_channels = diffusion_model.channels
-    return diffusion_model.ddim_sample((num_images, num_channels, image_size, image_size))
-
-
-@torch.no_grad()
-def ddpm_sample(diffusion_model, num_images=8, image_size=32):
-    """
-    Use the reverse sampling process from DDIM to go from 
-    a tensor of noise to a generated image.
-
-    TODO (Q3.1): fill `ddpm_sample` and the related functions.
-    """
-    num_channels = diffusion_model.channels
-    return diffusion_model.ddpm_sample((num_images, num_channels, image_size, image_size))
-
-def main(
-    sampling_method="ddpm",
-    ckpt="ckpt_diffusion/epoch_199.pth",
-    prefix="data",
-    num_images=8,
-):
-    prefix = f"{prefix}_{sampling_method}/"
+    prefix = f"data_{args.sampling_method}/"
     if not os.path.exists(prefix):
         os.makedirs(prefix)
     
-    sampling_timesteps = 25 if sampling_method == "ddpm" else None
+    sampling_timesteps = args.ddim_timesteps if args.sampling_method == "ddpm" else None
 
     model = Unet(
         dim=64,
@@ -57,24 +35,19 @@ def main(
         model,
         timesteps=1000,   # number of timesteps
         sampling_timesteps=sampling_timesteps,
+        ddim_sampling_eta=args.ddim_eta,
     ).cuda()
 
+    img_shape = (args.num_images, diffusion.channels, args.image_size, args.image_size)
+
     # load pre-trained weight
-    ckpt = torch.load(ckpt)
+    ckpt = torch.load(args.ckpt)
     model.load_state_dict(ckpt["model_state_dict"])
 
     # run inference
     model.eval()
-    if sampling_method == "ddpm":
-        generated_samples = ddpm_sample(diffusion, num_images)
-    elif sampling_method == "ddim":
-        generated_samples = ddim_sample(diffusion, num_images)
+    if args.sampling_method == "ddpm":
+        generated_samples = diffusion.ddpm_sample(img_shape)
+    elif args.sampling_method == "ddim":
+        generated_samples = diffusion.ddim_sample(img_shape)
     save_samples(generated_samples.cpu(), f"{prefix}/output.png", nrow=2)
-
-
-if __name__ == "__main__":
-    main(
-        sampling_method=args.sampling_method,
-        ckpt=args.ckpt,
-        num_images=args.num_images,
-    )

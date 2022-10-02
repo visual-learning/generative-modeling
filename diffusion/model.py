@@ -31,25 +31,23 @@ class DiffusionModel(nn.Module):
 
         alphas = 1. - self.betas
         self.alphas_cumprod = torch.cumprod(alphas, dim=0)
-        self.alphas_cumprod_prev = F.pad(self.alphas_cumprod[:-1], (1, 0), value = 1.)
-    
-        # calculations for diffusion q(x_t | x_{t-1}) and others
-        self.sqrt_alphas_cumprod = torch.sqrt(self.alphas_cumprod)
-        self.sqrt_one_minus_alphas_cumprod = torch.sqrt(1. - self.alphas_cumprod)
-        self.log_one_minus_alphas_cumprod =  torch.log(1. - self.alphas_cumprod)
-        self.sqrt_recip_alphas_cumprod = torch.sqrt(1. / self.alphas_cumprod)
-        self.sqrt_recipm1_alphas_cumprod = torch.sqrt(1. / self.alphas_cumprod - 1)
+        # TODO (Q3.1): compute the cummulative products for the previous timesteps
+        self.alphas_cumprod_prev = None
 
-        # calculations for posterior q(x_{t-1} | x_t, x_0)
-        self.posterior_variance = self.betas * (
-            1. - self.alphas_cumprod_prev) / (1. - self.alphas_cumprod)
+        # TODO (Q3.1): pre-compute the alphas needed for forward process
+        # Hint: you should look at all the equations and see what you can pre-compute
 
+
+        # calculations for posterior q(x_{t-1} | x_t, x_0) in DDPM
+        self.posterior_variance = self._get_posterior_variance()
         self.posterior_log_variance_clipped = torch.log(
             self.posterior_variance.clamp(min =1e-20))
-        self.posterior_mean_coef1 = self.betas * torch.sqrt(
-            self.alphas_cumprod_prev) / (1. - self.alphas_cumprod)
-        self.posterior_mean_coef2 = (1. - self.alphas_cumprod_prev) * torch.sqrt(alphas) / (
-            1. - self.alphas_cumprod)
+
+        # TODO (Q 3.1): compute the coefficients for the mean
+        # This is coefficient of x_0 in the DDPM section
+        self.posterior_mean_coef1 = None
+        # This is coefficient of x_t in the DDPM section
+        self.posterior_mean_coef2 = None
 
         # sampling related parameters
         self.sampling_timesteps = default(sampling_timesteps, timesteps) # default num sampling timesteps to number of timesteps at training
@@ -57,6 +55,11 @@ class DiffusionModel(nn.Module):
         assert self.sampling_timesteps <= timesteps
         self.is_ddim_sampling = self.sampling_timesteps < timesteps
         self.ddim_sampling_eta = ddim_sampling_eta
+    
+    def _get_posterior_variance(self):
+        # TODO (Q3.1): compute the variance of the posterior distribution
+        # Hint: this is the \sigma_{t} in the DDPM section
+        pass
 
     def predict_start_image_from_noise(self, x_t, t, noise):
         # TODO (Q3.1): given a noised image x_t and noise tensor, predict x_0
