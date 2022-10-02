@@ -178,7 +178,7 @@ The algorithm should then look something like:
    2. Find $x_{t-1}$ using the equations above.
 3. Return $x_0$
 
-#### Question 3.1.1: Implement DDPM sampling as described above to generate samples from the pretrained diffusion model. Below is an example of some generated samples from the pretrained model. (8 points)
+#### Question 3.1: Implement DDPM sampling as described above to generate samples from the pretrained diffusion model. Below is an example of some generated samples from the pretrained model. (8 points)
 
 <img src="./diffusion/sample_images/ddpm.png" width="400px"><img>
 

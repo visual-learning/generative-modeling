@@ -19,6 +19,8 @@ def ddim_sample(diffusion_model, num_images=8, image_size=32):
     """
     Use the reverse sampling process from DDIM to go from 
     a tensor of noise to a generated image.
+
+    TODO (Q3.2.1): fill `ddim_sample`
     """
     num_channels = diffusion_model.channels
     return diffusion_model.ddim_sample((num_images, num_channels, image_size, image_size))
@@ -29,6 +31,8 @@ def ddpm_sample(diffusion_model, num_images=8, image_size=32):
     """
     Use the reverse sampling process from DDIM to go from 
     a tensor of noise to a generated image.
+
+    TODO (Q3.1): fill `ddpm_sample` and the related functions.
     """
     num_channels = diffusion_model.channels
     return diffusion_model.ddpm_sample((num_images, num_channels, image_size, image_size))
