@@ -30,13 +30,12 @@ class DiffusionModel(nn.Module):
         self.num_timesteps = self.betas.shape[0]
 
         alphas = 1. - self.betas
-        self.alphas_cumprod = torch.cumprod(alphas, dim=0)
-        # TODO (Q3.1): compute the cummulative products for the previous timesteps
+        # TODO (Q3.1): compute the cummulative products for current and previous timesteps
+        self.alphas_cumprod = None
         self.alphas_cumprod_prev = None
 
         # TODO (Q3.1): pre-compute the alphas needed for forward process
         # Hint: you should look at all the equations and see what you can pre-compute
-
 
         # calculations for posterior q(x_{t-1} | x_t, x_0) in DDPM
         self.posterior_variance = self._get_posterior_variance()
@@ -59,7 +58,7 @@ class DiffusionModel(nn.Module):
     def _get_posterior_variance(self):
         # TODO (Q3.1): compute the variance of the posterior distribution
         # Hint: this is the \sigma_{t} in the DDPM section
-        pass
+        raise NotImplementedError()
 
     def predict_start_image_from_noise(self, x_t, t, noise):
         # TODO (Q3.1): given a noised image x_t and noise tensor, predict x_0
