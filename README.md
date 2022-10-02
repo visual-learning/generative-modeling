@@ -4,7 +4,7 @@
 - TAs: Vanshaj Chowdhary (vanshajc), Anirudh Chakravarthy (achakrav)
 - Based on Spring 2019 Deep Unsupervised Learning at UC Berkeley, Homework 3 and Homework 4
 - Please post questions, if any, on the piazza for HW2.
-- Total points: 90 + 20 (extra credit)
+- Total points: 90 + 30 (extra credit)
 - Due Date: Oct 26, 2022 at 11:59pm EST.
 - Please start EARLY!
 
@@ -158,7 +158,7 @@ We know how much noise we have added in the forward process. Therefore, we take 
 $$x_0 = \frac{1}{\sqrt{\bar{\alpha_t}}} (x_t - \sqrt{1 - \bar{\alpha_t}} \epsilon_t)$$
 
 
-### 3.1 Denoising Diffusion Probabilistic Models (8 points)
+### 3.1 Denoising Diffusion Probabilistic Models (15 points)
 
 To run inference using Denoising Diffusion Probabilistic Models (DDPM), we first sample a random noise vector $x_T$ and apply the denoising process repeatedly with the equation below to generate $x_0$.
 
@@ -178,11 +178,11 @@ The algorithm should then look something like:
    2. Find $x_{t-1}$ using the equations above.
 3. Return $x_0$
 
-#### Question 3.1: Implement DDPM sampling as described above to generate samples from the pretrained diffusion model. Below is an example of some generated samples from the pretrained model. (8 points)
+#### Question 3.1: Implement DDPM sampling as described above to generate samples from the pretrained diffusion model. Below is an example of some generated samples from the pretrained model. (15 points)
 
 <img src="./diffusion/sample_images/ddpm.png" width="400px"><img>
 
-### 3.2 Denoising Diffusion Implicit Model (12 points)
+### 3.2 Denoising Diffusion Implicit Model (15 points)
 The issue with DDPM is that we need to loop over all the timestamps sequentially, which is not very efficient. Denoising Diffusion Implicit Model (DDIM) samples a small number of timesteps $S$ from the total timestamps. We can do this sampling evenly across the $[1, T]$ range with a step-size of $\frac{T}{S}$ to get a total of S timesteps $[\tau_1, \tau_2, ..., \tau_{S}]$. 
 
 $$q(x_{\tau_{i - 1}} | x_{\tau_t}, x_0) = \mathcal{N}(x_{\tau_{i-1}}; \sqrt{\bar{\alpha_{t-1}}} x_0 + \sqrt{1 - \bar{\alpha_{t-1}} - \sigma_{t}^2} \epsilon_t; \sigma_t^2 \mathcal{I}) $$
@@ -198,7 +198,7 @@ The algorithm for DDIM should then look something like:
    2. Find $x_{\tau_{i - 1}}$ using the equations above.
 3. Return $x_0$
 
-#### Question 3.2.1: Implement the DDIM sampling method. Below is an example of some generated samples from the pretrained model. (4 points)
+#### Question 3.2.1: Implement the DDIM sampling method. Below is an example of some generated samples from the pretrained model. (5 points)
 
 <img src="./diffusion/sample_images/ddim.png" width="400px"><img>
 
@@ -207,7 +207,7 @@ The algorithm for DDIM should then look something like:
 
 * Describe the performance of DDIM sampling with different $\eta$ values. Plot generated samples with atleast 3 different values of $\eta$. Discuss any potential trade-offs for choosing $\eta$. (2 points)
 
-#### Question 3.2.4: Other sampling methods for diffusion models (2 points)
+#### Question 3.2.4: Other sampling methods for diffusion models (4 points)
 * Describe and implement another sampling method with the diffusion model for inference and describe the advantages and disadvantages of your idea.
 
 #### Question 3.2.5: Comparison with GANs and VAEs (2 points)
