@@ -140,7 +140,7 @@ Another way to improve the quality of samples is to use an annealing scheme for 
 
 ## Task 3: (Extra Credit) Diffusion Models (20 points)
 
-We will be training diffusion models on CIFAR-10 and compare the results to GAN and VAE.
+We will be training diffusion models on CIFAR-10 and compare the results to GAN and VAE. The code skeleton is given in model.py. You need to fill the questions marked as TODO.
 
 Diffusion models have recently becoming very popular generative modeling technique. In this assignment, we will experiment with different sampling methods for diffusion models. Diffusion models apply a series of gaussian noise to an input image, and try to denoise these noisy images by predicting the noise at each timestep. For this assignment, we will use the provided pretrained diffusion model trained on CIFAR-10 and will implement different sampling techniques for model inference.
 
