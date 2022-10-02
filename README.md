@@ -138,9 +138,9 @@ Another way to improve the quality of samples is to use an annealing scheme for 
 1. Make sure the autoencoder can produce good quality reconstructions before moving on to the VAE. While the VAE reconstructions might not be clear and the VAE samples even less so, the autoencoder reconstructions should be very clear.
 
 
-## Task 3: (Extra Credit) Diffusion Models (20 points)
+## Task 3: (Extra Credit) Diffusion Models (30 points)
 
-We will be training diffusion models on CIFAR-10 and compare the results to GAN and VAE. The code skeleton is given in model.py. You need to fill the questions marked as TODO.
+We will be running inference using pre-trained diffusion models on CIFAR-10 and compare the results to GAN and VAE. The code skeleton is given in model.py. You need to fill the questions marked as TODO. First, download the pre-trained checkpoint from https://drive.google.com/file/d/1gtn9Jv9jBUol7iJw-94hw4j6KfpG3SZE/view?usp=sharing
 
 Diffusion models have recently becoming very popular generative modeling technique. In this assignment, we will experiment with different sampling methods for diffusion models. Diffusion models apply a series of gaussian noise to an input image, and try to denoise these noisy images by predicting the noise at each timestep. For this assignment, we will use the provided pretrained diffusion model trained on CIFAR-10 and will implement different sampling techniques for model inference.
 
