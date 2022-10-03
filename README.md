@@ -1,4 +1,4 @@
-# Assignment 2: Generative Modeling (10% of total class credit)
+# Assignment 2: Generative Modeling
 
 - [Visual Learning and Recognition (16-824) Fall 2022](https://visual-learning.cs.cmu.edu/index.html)
 - TAs: Vanshaj Chowdhary (vanshajc), Anirudh Chakravarthy (achakrav)

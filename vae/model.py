@@ -4,6 +4,7 @@ import torch.nn as nn
 import torch.utils.data as data
 import torch.optim as optim
 
+
 class Encoder(nn.Module):
     def __init__(self, input_shape, latent_dim):
         super().__init__()
@@ -24,22 +25,25 @@ class Encoder(nn.Module):
         self.convs = ...
         self.conv_out_dim = input_shape[1] // 8 * input_shape[2] // 8 * 256
 
-        #TODO 2.1.1: fill in self.fc, such that output dimension is self.latent_dim
+        # TODO 2.1.1: fill in self.fc, such that output dimension is self.latent_dim
         self.fc = ...
 
     def forward(self, x):
-        #TODO 2.1.1 : forward pass through the network, output should be of dimension : self.latent_dim
+        # TODO 2.1.1 : forward pass through the network, output should be of dimension : self.latent_dim
+        pass
 
 
 class VAEEncoder(Encoder):
     def __init__(self, input_shape, latent_dim):
         super().__init__(input_shape, latent_dim)
-        #TODO 2.2.1: fill in self.fc, such that output dimension is 2*self.latent_dim
+        # TODO 2.2.1: fill in self.fc, such that output dimension is 2*self.latent_dim
         self.fc = ...
     
     def forward(self, x):
-        #TODO 2.2.1: forward pass through the network.
+        # TODO 2.2.1: forward pass through the network.
         # should return a tuple of 2 tensors, each of dimension self.latent_dim
+        pass
+
 
 class Decoder(nn.Module):
     def __init__(self, latent_dim, output_shape):
@@ -67,7 +71,9 @@ class Decoder(nn.Module):
         self.deconvs = ...
 
     def forward(self, z):
-        #TODO 2.1.1: forward pass through the network, first through self.fc, then self.deconvs.
+        # TODO 2.1.1: forward pass through the network, first through self.fc, then self.deconvs.
+        pass
+
 
 class AEModel(nn.Module):
     def __init__(self, variational, latent_size, input_shape = (3, 32, 32)):

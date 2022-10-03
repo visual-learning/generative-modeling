@@ -13,12 +13,14 @@ import time
 import os
 from utils import *
 
+
 def ae_loss(model, x):
     """ 
     TODO 2.1.2: fill in MSE loss between x and its reconstruction. 
     return loss, {recon_loss = loss} 
     """
-    
+    loss = None
+
     return loss, OrderedDict(recon_loss=loss)
 
 def vae_loss(model, x, beta = 1):
@@ -112,6 +114,7 @@ def main(log_dir, loss_mode = 'vae', beta_mode = 'constant', num_epochs = 20, ba
 
 
 if __name__ == '__main__':
+    pass
     #TODO: Experiments to run : 
     #2.1 - Auto-Encoder
     #Run for latent_sizes 16, 128 and 1024
@@ -125,4 +128,7 @@ if __name__ == '__main__':
     #main('vae_latent1024_beta_constant0.8', loss_mode = 'vae', beta_mode = 'constant', target_beta_val = 0.8, num_epochs = 20, latent_size = 1024)
 
     #Q 2.3.2 - VAE with annealed beta (linear schedule)
-    #main('vae_latent1024_beta_linear1', loss_mode = 'vae', beta_mode = 'linear', target_beta_val = 1, num_epochs = 20, latent_size = 1024)
+    # main(
+    #     'vae_latent1024_beta_linear1', loss_mode = 'vae', beta_mode = 'linear', 
+    #     target_beta_val = 1, num_epochs = 20, latent_size = 1024
+    # )

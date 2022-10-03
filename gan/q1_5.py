@@ -11,12 +11,14 @@ def compute_discriminator_loss(
 ):
     # TODO 1.5.1: Implement WGAN-GP loss for discriminator.
     # loss = E[D(fake_data)] - E[D(real_data)] + lambda * E[(|| grad wrt interpolated_data (D(interpolated_data))|| - 1)^2]
+    loss = None
     return loss
 
 
 def compute_generator_loss(discrim_fake):
     # TODO 1.5.1: Implement WGAN-GP loss for generator.
     # loss = - E[D(fake_data)]
+    loss = None
     return loss
 
 
