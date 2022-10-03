@@ -1,18 +1,18 @@
-# Assignment 3: Generative Modeling (10% of total class credit)
+# Assignment 2: Generative Modeling (10% of total class credit)
 
-- [Visual Learning and Recognition (16-824) Spring 2022](https://visual-learning.cs.cmu.edu/index.html)
-- Created By: [Murtaza Dalal](https://mihdalal.github.io/), [Russell Mendonca](https://russellmendonca.github.io/)
-- TAs: [Murtaza Dalal](https://mihdalal.github.io/), [Russell Mendonca](https://russellmendonca.github.io/)
+- [Visual Learning and Recognition (16-824) Fall 2022](https://visual-learning.cs.cmu.edu/index.html)
+- TAs: Vanshaj Chowdhary (vanshajc), Anirudh Chakravarthy (achakrav)
 - Based on Spring 2019 Deep Unsupervised Learning at UC Berkeley, Homework 3 and Homework 4
-- Please post questions, if any, on the piazza for HW3.
-- Total points: 90
-- Due Date: April 4, 2022 at 11:59pm EST.
+- Please post questions, if any, on the piazza for HW2.
+- Total points: 90 + 30 (extra credit)
+- Due Date: Oct 26, 2022 at 11:59pm EST.
 - Please start EARLY!
 
-In this assignment you will do two main things:
+In this assignment you will explore three main generative modeling architectures:
 
 1. Implement a basic GAN network architecture, the standard GAN [1](https://arxiv.org/pdf/1406.2661.pdf), LSGAN [2](https://arxiv.org/pdf/1611.04076.pdf) and WGAN-GP [3](https://arxiv.org/pdf/1704.00028.pdf)
 2. Implement an auto-encoder, variational auto-encoder (VAE) [4](https://arxiv.org/pdf/1606.05908.pdf) and a beta-VAE [5](https://arxiv.org/pdf/1804.03599.pdf) with linear schedule.
+3. (Extra Credit) Implement DDPM [6](https://arxiv.org/abs/2006.11239) and DDIM [7](https://arxiv.org/abs/2010.02502) sampling for diffusion models.
 
 **Submission Requirements**:
 
@@ -138,6 +138,82 @@ Another way to improve the quality of samples is to use an annealing scheme for 
 1. Make sure the autoencoder can produce good quality reconstructions before moving on to the VAE. While the VAE reconstructions might not be clear and the VAE samples even less so, the autoencoder reconstructions should be very clear.
 
 
+## Task 3: (Extra Credit) Diffusion Models (30 points)
+
+We will be running inference using pre-trained diffusion models on CIFAR-10 and compare the results to GAN and VAE. The code skeleton is given in model.py. You need to fill the questions marked as TODO. First, download the pre-trained checkpoint from https://drive.google.com/file/d/1gtn9Jv9jBUol7iJw-94hw4j6KfpG3SZE/view?usp=sharing
+
+Diffusion models have recently becoming very popular generative modeling technique. In this assignment, we will experiment with different sampling methods for diffusion models. Diffusion models apply a series of gaussian noise to an input image, and try to denoise these noisy images by predicting the noise at each timestep. For this assignment, we will use the provided pretrained diffusion model trained on CIFAR-10 and will implement different sampling techniques for model inference.
+
+Given an input image $x_0$, the forward process sequentially applies a gaussian noise to the image as follows:
+$$q(x_t | x_{t-1}) = \mathcal{N}(x_t; \sqrt{1 - \beta_t} x_{t-1}, \beta_t\mathcal{I})$$
+
+where $\beta$ is defined as some variance schedule. In our case, we use a cosine schedule to set $\beta$.
+
+The above equation depends on $x_{t-1}$ for each $x_t$ which implies that to get the noised output at time $t$, we need the noised output at $t-1$. However, we already fixed the beta schedule beforehand, and therefore we can reparametrize the above equation and generate any arbitrary noised input $x_t$ directly, just given our initial image $x_0$:
+$$q(x_t | x_0) = \mathcal{N}(x_t; \sqrt{\bar{\alpha_t}} x_0, (1 - \alpha_t)\mathcal{I})$$
+
+$$\alpha_t = 1 - \beta_t, \bar{\alpha_t} = \prod_{i=1}^t \alpha_i$$
+
+We know how much noise we have added in the forward process. Therefore, we take the output from the forward process $x_t$ and using a denoising network (which takes the noised image and timestamp as inputs), we predict the noise $\epsilon_t$ which was added. By repeating this several times, we can predict the starting image $x_0$. This is called the reverse process.
+$$x_0 = \frac{1}{\sqrt{\bar{\alpha_t}}} (x_t - \sqrt{1 - \bar{\alpha_t}} \epsilon_t)$$
+
+
+### 3.1 Denoising Diffusion Probabilistic Models (15 points)
+
+To run inference using Denoising Diffusion Probabilistic Models (DDPM), we first sample a random noise vector $x_T$ and apply the denoising process repeatedly with the equation below to generate $x_0$.
+
+$$x_{t - 1} = \tilde{\mu}_t + \sigma_t z$$
+
+$$\tilde{\mu_t} = \frac{\sqrt{\alpha_t} (\bar{\alpha_{t-1}})}{1 - \bar{\alpha_t}} x_t + \frac{\sqrt{\bar{\alpha_{t-1}}}\beta_t}{1 - \bar{\alpha_t}} x_0$$
+
+$$\sigma_t = \tilde{\beta_t} = \frac{1 - \bar\alpha_{t - 1}}{1 - \bar\alpha_t} \beta_t$$
+
+Here $z$ is a random noise vector from a standard normal distribution.
+
+The algorithm should then look something like:
+
+1. Sample random noise vector $x_T$.
+2. For each t in $[T, 1]$
+   1. Sample a noise vector $z$ if t > 0 otherwise, $z$ = 0.
+   2. Find $x_{t-1}$ using the equations above.
+3. Return $x_0$
+
+#### Question 3.1: Implement DDPM sampling as described above to generate samples from the pretrained diffusion model. Below is an example of some generated samples from the pretrained model. (15 points)
+
+<img src="./diffusion/sample_images/ddpm.png" width="400px"><img>
+
+### 3.2 Denoising Diffusion Implicit Model (15 points)
+The issue with DDPM is that we need to loop over all the timestamps sequentially, which is not very efficient. Denoising Diffusion Implicit Model (DDIM) samples a small number of timesteps $S$ from the total timestamps. We can do this sampling evenly across the $[1, T]$ range with a step-size of $\frac{T}{S}$ to get a total of S timesteps $[\tau_1, \tau_2, ..., \tau_{S}]$. 
+
+$$q(x_{\tau_{i - 1}} | x_{\tau_t}, x_0) = \mathcal{N}(x_{\tau_{i-1}}; \sqrt{\bar{\alpha_{t-1}}} x_0 + \sqrt{1 - \bar{\alpha_{t-1}} - \sigma_{t}^2} \epsilon_t; \sigma_t^2 \mathcal{I}) $$
+
+$$\sigma_{t}^2 = \eta \tilde{\beta_t}, \hspace{10px} \tilde{\beta_t} = \frac{1 - \bar{\alpha_{t - 1}}}{1 - \bar\alpha_t} \beta_t$$
+
+where $\eta$ is a hyperparameter along with $S$. Here $q$ represents the distribution from which we can sample to get $x_{\tau_{i - 1}}$.
+
+The algorithm for DDIM should then look something like:
+1. Sample random noise vector $x_T$.
+2. For each t in $[\tau_S, \tau_{S - 1}, ..., \tau_1]$
+   1. Sample a noise vector $z$ if t > 0 otherwise, $z$ = 0.
+   2. Find $x_{\tau_{i - 1}}$ using the equations above.
+3. Return $x_0$
+
+#### Question 3.2.1: Implement the DDIM sampling method. Below is an example of some generated samples from the pretrained model. (5 points)
+
+<img src="./diffusion/sample_images/ddim.png" width="400px"><img>
+
+#### Question 3.2.2: DDIM Analysis (4 points)
+* Describe the performance of DDIM sampling with different number of sampled timestamps (S). Plot generated samples with atleast 3 different values of S. Discuss any potential trade-offs for choosing S. (2 points)
+
+* Describe the performance of DDIM sampling with different $\eta$ values. Plot generated samples with atleast 3 different values of $\eta$. Discuss any potential trade-offs for choosing $\eta$. (2 points)
+
+#### Question 3.2.4: Other sampling methods for diffusion models (4 points)
+* Describe and implement another sampling method with the diffusion model for inference and describe the advantages and disadvantages of your idea.
+
+#### Question 3.2.5: Comparison with GANs and VAEs (2 points)
+* Compare the quality of the generated samples from the diffusion model with GANs and VAEs. Include both quantiative (FID) and qualitative analysis. 
+
+
 ## Relevant papers:
 [1] Generative Adversarial Nets (Goodfellow et al, 2014): https://arxiv.org/pdf/1406.2661.pdf
 
@@ -149,6 +225,13 @@ Another way to improve the quality of samples is to use an annealing scheme for 
 
 [5] Understanding disentangling in β-VAE (Burgess et al, 2018): https://arxiv.org/pdf/1804.03599.pdf
 
+[6] Denoising diffusion probabilistic models (Jonathan Ho, et al, 2020): https://arxiv.org/abs/2006.11239
+
+[7] Denoising diffusion implicit models (Jiaming Song et al, 2020): https://arxiv.org/abs/2010.02502
+
+[8] What are diffusion models? Lil’Log. (Lilian Weng, 2021): https://lilianweng.github.io/posts/2021-07-11-diffusion-models/
+
+
 ## Submission Checklist
 ### Report
 
@@ -158,5 +241,5 @@ All visualizations and plots as well as your responses to the questions, ordered
 Please make a separate pdf report in which you include your results. Put each sub-question, ie. 1.3, 1.4, 1.5 on a separate page.
 
 ### Files
-Your code in the `gan/` and `vae/` folders.
+Your code in the `gan/`, `vae/`, `diffusion/` folders.
 

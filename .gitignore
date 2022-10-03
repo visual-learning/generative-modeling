@@ -2,5 +2,7 @@ gan/data_gan/
 gan/data_ls_gan/
 gan/data_wgan_gp/
 gan/datasets/
+diffusion/data_ddpm/
+diffusion/data_ddim/
 
 __pycache__
