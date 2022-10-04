@@ -11,7 +11,7 @@
 In this assignment you will explore three main generative modeling architectures:
 
 1. Implement a basic GAN network architecture, the standard GAN [1](https://arxiv.org/pdf/1406.2661.pdf), LSGAN [2](https://arxiv.org/pdf/1611.04076.pdf) and WGAN-GP [3](https://arxiv.org/pdf/1704.00028.pdf)
-2. Implement an auto-encoder, variational auto-encoder (VAE) [4](https://arxiv.org/pdf/1606.05908.pdf) and a beta-VAE [5](https://arxiv.org/pdf/1804.03599.pdf) with linear schedule.
+2. Implement an auto-encoder, variational auto-encoder (VAE) [4](https://arxiv.org/pdf/1606.05908.pdf) and a beta-VAE [5](https://arxiv.org/pdf/1804.03599.pdf) with a linear schedule.
 3. (Extra Credit) Implement DDPM [6](https://arxiv.org/abs/2006.11239) and DDIM [7](https://arxiv.org/abs/2010.02502) sampling for diffusion models.
 
 **Submission Requirements**:
@@ -40,18 +40,18 @@ cp cub_clean_custom_na.npz /path/to/python_env/lib/python3.8/site-packages/clean
 ```
 
 ## Task 1: Generative Adversarial Networks (60 points)
-We will be training our GANs on the CUB 2011 Dataset (http://www.vision.caltech.edu/visipedia/CUB-200-2011.html). This dataset contains 11,708 images of close up shots of different bird species in various environments. Our models will be trained to generate realistic looking samples of these birds. Due to compute considerations for the course, we will be using a downsampled version of the dataset at a 32x32 resolution.
+We will be training our GANs on the CUB 2011 Dataset (http://www.vision.caltech.edu/visipedia/CUB-200-2011.html). This dataset contains 11,708 images of close-up shots of different bird species in various environments. Our models will be trained to generate realistic-looking samples of these birds. Due to computational considerations for the course, we will be using a downsampled version of the dataset at a 32x32 resolution.
 
 ### Question 1.1: GAN Network Architecture
 Let's start by setting up our networks for training a Generative Adversarial Network (GAN). As we covered in class, GANs have two networks, a generator and a discriminator. The generator takes in a noise sample z, generally sampled from the standard normal distribution, and maps it to an image. The discriminator takes in images and outputs the probability that the image is real or fake.
 You will need to fill out `networks.py` wherever `#TODO 1.1` is written.
 
 ### Question 1.2: GAN Training Code
-Now we need to setup the training code for the GAN in `train.py`. Most of the code has been provided but please fill out all of the sections that have `#TODO 1.2`.
+Now we need to set up the training code for the GAN in `train.py`. Most of the code has been provided but please fill out all of the sections that have `#TODO 1.2`.
 Additionally, implement a function to do latent space interpolation (see utils.py).
 
 ### Question 1.3: Implement GAN loss (20 points)
-In general, we train the generator such that it can fool the discriminator, ie samples from the generator will have high probability under the discriminator. Analogously, we train the discriminator such that it can tell apart real and fake images. This means our loss term encourages the discriminator to assign high probability to real images while assigning low probability to fake images. In this section, we will implement the original GAN losses for the generator and discriminator as described in Algorithm 1 of [1]((https://arxiv.org/pdf/1406.2661.pdf)) in `q1_3.py`.
+In general, we train the generator such that it can fool the discriminator, i.e., samples from the generator will have a high probability under the discriminator. Analogously, we train the discriminator such that it can tell apart real and fake images. This means our loss term encourages the discriminator to assign a high probability to real images while assigning a low probability to fake images. In this section, we will implement the original GAN losses for the generator and discriminator as described in Algorithm 1 of [1]((https://arxiv.org/pdf/1406.2661.pdf)) in `q1_3.py`.
 
 #### Question 1.3.1: Implement the GAN loss from the GAN paper [1](https://arxiv.org/pdf/1406.2661.pdf)
 #### Question 1.3.2: Run q1_3.py
@@ -91,7 +91,7 @@ import os
 os.environ["PYTORCH_JIT"] = "0"
 ```
 2. GAN losses are pretty much meaningless! If you want to understand if your network is learning, visualize the samples. The FID score should generally be going down as well.
-3. Don't change the hyper-parameters at all, they have been carefully tuned to ensure the networks will train stably, if things aren't working its a bug in your code.
+3. Don't change the hyper-parameters at all, they have been carefully tuned to ensure the networks will train stably, if things aren't working, it is a bug in your code.
 
 ## Task 2: Variational Autoencoders (30 points)
 
@@ -106,8 +106,8 @@ In train.py, fill in the TODOs where 2.1.2 is mentioned. This includes the loss 
 
 #### Running the auto-encoder
 * Run the command under 2.1  (commands to run can be found at the end of the train.py file). Train the autoencoder for 20 epochs, and try latent sizes 16, 128 and 1024. If your code is correct, the reconstructions should be very clear and sharp. 
-* Plot the reconstruction loss (for the valiation data) versus number of epochs trained on for all three latent size settings on the same plot.
-* Include the reconstruction plots from epoch19 for each latent setting. Which latent size performs best? What are possible reasons for this?
+* Plot the reconstruction loss (for the validation data) versus the number of epochs trained for all three latent size settings on the same plot.
+* Include the reconstruction plots from epoch 19 for each latent setting. Which latent size performs best? What are some possible reasons for this?
 
 ### Question 2.2: Variational Auto-Encoder (10 points)
 #### Question 2.2.1: Architecture
@@ -118,7 +118,7 @@ Fill in the recon_loss and kl_loss that make up the total loss for the VAE, unde
 
 #### Running the VAE
 * Run the command under 2.2 (run for 20 epochs). 
-* Plot the reconstruction loss and kl loss (for the valiation data) versus number of
+* Plot the reconstruction loss and kl loss (for the validation data) versus the number of
   epochs (separate plots). Recon loss of reference solution is < 145 at epoch 19 (remember to average only across batch dimension). 
 * Include reconstruction and sample plots from epoch 19. 
 
@@ -132,17 +132,17 @@ The blurriness of the samples can be reduced by tuning the value of beta.
 #### Question 2.3.2: Linear schedule for beta
 Another way to improve the quality of samples is to use an annealing scheme for beta. Fill in TODO for 2.3.2. The value of beta should increase linearly from 0 at epoch 0 to target_val at epoch max_epochs.
 * Include plots of samples from epoch 19. Plot the recon loss across epochs (Recon loss at epoch 19 of reference solution is < 125) 
-* How do these compare to those from the vanilla VAE ? 
+* How do these compare to those from the vanilla VAE? 
 
 ### Debugging Tips
-1. Make sure the autoencoder can produce good quality reconstructions before moving on to the VAE. While the VAE reconstructions might not be clear and the VAE samples even less so, the autoencoder reconstructions should be very clear.
+1. Make sure the autoencoder can produce good-quality reconstructions before moving on to the VAE. While the VAE reconstructions might not be clear and the VAE samples even less so, the autoencoder reconstructions should be very clear.
 
 
 ## Task 3: (Extra Credit) Diffusion Models (30 points)
 
-We will be running inference using pre-trained diffusion models on CIFAR-10 and compare the results to GAN and VAE. The code skeleton is given in model.py. You need to fill the questions marked as TODO. First, download the pre-trained checkpoint from https://drive.google.com/file/d/1gtn9Jv9jBUol7iJw-94hw4j6KfpG3SZE/view?usp=sharing
+We will be running inference using pre-trained diffusion models on CIFAR-10 and compare the results to GAN and VAE. The code skeleton is given in model.py. You need to fill in the questions marked as TODO. First, download the pre-trained checkpoint from https://drive.google.com/file/d/1gtn9Jv9jBUol7iJw-94hw4j6KfpG3SZE/view?usp=sharing
 
-Diffusion models have recently becoming very popular generative modeling technique. In this assignment, we will experiment with different sampling methods for diffusion models. Diffusion models apply a series of gaussian noise to an input image, and try to denoise these noisy images by predicting the noise at each timestep. For this assignment, we will use the provided pretrained diffusion model trained on CIFAR-10 and will implement different sampling techniques for model inference.
+Diffusion models have recently become a very popular generative modeling technique. In this assignment, we will experiment with different sampling methods for diffusion models. Diffusion models apply a series of gaussian noise to an input image, and try to denoise these noisy images by predicting the noise at each timestep. For this assignment, we will use the provided pre-trained diffusion model trained on CIFAR-10 and will implement different sampling techniques for model inference.
 
 Given an input image $x_0$, the forward process sequentially applies a gaussian noise to the image as follows:
 $$q(x_t | x_{t-1}) = \mathcal{N}(x_t; \sqrt{1 - \beta_t} x_{t-1}, \beta_t\mathcal{I})$$
@@ -178,7 +178,7 @@ The algorithm should then look something like:
    2. Find $x_{t-1}$ using the equations above.
 3. Return $x_0$
 
-#### Question 3.1: Implement DDPM sampling as described above to generate samples from the pretrained diffusion model. Below is an example of some generated samples from the pretrained model. (15 points)
+#### Question 3.1: Implement DDPM sampling as described above to generate samples from the pre-trained diffusion model. Below is an example of some generated samples from the pre-trained model. (15 points)
 
 <img src="./diffusion/sample_images/ddpm.png" width="400px"><img>
 
@@ -198,20 +198,20 @@ The algorithm for DDIM should then look something like:
    2. Find $x_{\tau_{i - 1}}$ using the equations above.
 3. Return $x_0$
 
-#### Question 3.2.1: Implement the DDIM sampling method. Below is an example of some generated samples from the pretrained model. (5 points)
+#### Question 3.2.1: Implement the DDIM sampling method. Below is an example of some generated samples from the pre-trained model. (5 points)
 
 <img src="./diffusion/sample_images/ddim.png" width="400px"><img>
 
 #### Question 3.2.2: DDIM Analysis (4 points)
-* Describe the performance of DDIM sampling with different number of sampled timestamps (S). Plot generated samples with atleast 3 different values of S. Discuss any potential trade-offs for choosing S. (2 points)
+* Describe how the performance of DDIM sampling varies with different number of sampled timestamps (S). Plot generated samples with at least 3 different values of S. Discuss any potential trade-offs for choosing S. (2 points)
 
-* Describe the performance of DDIM sampling with different $\eta$ values. Plot generated samples with atleast 3 different values of $\eta$. Discuss any potential trade-offs for choosing $\eta$. (2 points)
+* Describe the performance of DDIM sampling with different $\eta$ values. Plot generated samples with at least 3 different values of $\eta$. Discuss any potential trade-offs for choosing $\eta$. (2 points)
 
 #### Question 3.2.4: Other sampling methods for diffusion models (4 points)
 * Describe and implement another sampling method with the diffusion model for inference and describe the advantages and disadvantages of your idea.
 
 #### Question 3.2.5: Comparison with GANs and VAEs (2 points)
-* Compare the quality of the generated samples from the diffusion model with GANs and VAEs. Include both quantiative (FID) and qualitative analysis. 
+* Compare the quality of the generated samples from the diffusion model with GANs and VAEs. Include both quantitative (FID) and qualitative analysis. 
 
 
 ## Relevant papers:
