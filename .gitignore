@@ -1,0 +1,14 @@
+vae_solutions/data/
+gan/data_gan/
+gan/data_ls_gan/
+gan/data_wgan_gp/
+datasets/
+
+gan_solutions/data_gan/
+gan_solutions/data_ls_gan/
+gan_solutions/data_wgan_gp/
+__pycache__
+
+diffusion_solutions/data_ddim/
+diffusion_solutions/data_ddpm/
+diffusion_solutions/epoch_199.pth
