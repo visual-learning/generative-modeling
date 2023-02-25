@@ -29,7 +29,7 @@ $$\tilde{\mu_t} = \frac{\sqrt{\alpha_t} (1 - \bar{\alpha_{t-1}})}{1 - \bar{\alph
 
 $$\sigma_t = \tilde{\beta_t} = \frac{1 - \bar\alpha_{t - 1}}{1 - \bar\alpha_t} \beta_t$$
 
-$$x_{t - 1} = \tilde{\mu}_t + \sigma_t^2 z$$
+$$x_{t - 1} = \tilde{\mu}_t + \sigma_t z$$
 
 
 The algorithm should then look something like:
