@@ -18,4 +18,3 @@ Additionally, implement the interpolated batch (which is necessary for the loss)
 [2] Least Squares Generative Adversarial Networks (Mao etclassification al, 2016): https://arxiv.org/pdf/1611.04076.pdf
 
 [3] Improved Training of Wasserstein GANs (Gulrajani et al, 2017): https://arxiv.org/pdf/1704.00028.pdf
-

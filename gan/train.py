@@ -1,6 +1,7 @@
 from glob import glob
 import os
 import torch
+import torch.optim as optim
 from tqdm import tqdm
 from utils import get_fid, interpolate_latent_space, save_plot
 from torchvision import transforms
@@ -8,12 +9,24 @@ from torchvision.utils import save_image
 from PIL import Image
 from torchvision.datasets import VisionDataset
 
+class Rescale():
+    def __init__(self):
+        pass
+    def __call__(self,image):
+        image -= 0.5
+        image *= 2
+
+        return image
 
 def build_transforms():
     # TODO 1.2: Add two transforms:
     # 1. Convert input image to tensor.
     # 2. Rescale input image to be between -1 and 1.
     # NOTE: don't do anything fancy for 2, hint: the input image is between 0 and 1.
+    ds_transforms = transforms.Compose([
+        Rescale(),
+        transforms.ToTensor()
+    ])
     return ds_transforms
 
 
@@ -24,6 +37,10 @@ def get_optimizers_and_schedulers(gen, disc):
     # 2. Construct the learning rate schedulers for the generator and discriminator.
     # The learning rate for the discriminator should be decayed to 0 over 500K iterations.
     # The learning rate for the generator should be decayed to 0 over 100K iterations.
+
+    optim_discriminator = optim.Adam(disc.parameters(), lr=0.0002, betas=(0, 0.9))
+    optim_generator = optim.Adam(gen.parameters(), lr=0.0002, betas=(0,0.9))
+    scheduler_discriminator = optim.lr_scheduler.
     return (
         optim_discriminator,
         scheduler_discriminator,
