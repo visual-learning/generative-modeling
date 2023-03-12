@@ -1,5 +1,7 @@
 Please follow the instructions for this part of the assignment in THIS order!
 
+First, download the pre-trained checkpoint from https://drive.google.com/file/d/1gtn9Jv9jBUol7iJw-94hw4j6KfpG3SZE/view?usp=sharing.
+
 Diffusion models have recently become a very popular generative modeling technique. In this assignment, we will experiment with different sampling methods for diffusion models. Diffusion models apply a series of gaussian noise to an input image, and try to denoise these noisy images by predicting the noise at each timestep. For this assignment, we will use the provided pre-trained diffusion model trained on CIFAR-10 and will implement different sampling techniques for model inference. Please refer to Lilian Weng's blog post here: https://lilianweng.github.io/posts/2021-07-11-diffusion-models/ for additional explanation/derivation.
 
 Given an input image $x_0$, the forward process sequentially applies a gaussian noise to the image, producing the following conditional distribution:
