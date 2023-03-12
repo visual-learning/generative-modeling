@@ -117,7 +117,7 @@ def main(log_dir, loss_mode = 'vae', beta_mode = 'constant', num_epochs = 20, ba
                 vis_samples(model, 'data/'+log_dir+ '/epoch_'+str(epoch) )
     for k,v in plot_metrics.items():
         plt.clf()
-        save_plot(list(range(len(v))), v, "Epochs", k, "{k} vs. Epochs", 'data/' + log_dir + f'/{k}_vs_iterations')
+        save_plot(list(range(len(v))), v, "Epochs", k, f"{k} vs. Epochs", 'data/' + log_dir + f'/{k}_vs_iterations')
 
 if __name__ == '__main__':
     # argparser:
