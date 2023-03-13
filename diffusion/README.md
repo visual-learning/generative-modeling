@@ -29,7 +29,7 @@ $$ z \sim \mathcal{N}(0, \mathcal{I})$$
 
 $$\tilde{\mu_t} = \frac{\sqrt{\alpha_t} (1 - \bar{\alpha_{t-1}})}{1 - \bar{\alpha_t}} x_t + \frac{\sqrt{\bar{\alpha_{t-1}}}\beta_t}{1 - \bar{\alpha_t}} \hat{x_0}$$
 
-$$\sigma_t = \tilde{\beta_t} = \frac{1 - \bar\alpha_{t - 1}}{1 - \bar\alpha_t} \beta_t$$
+$$\sigma_t^2 = \tilde{\beta_t} = \frac{1 - \bar\alpha_{t - 1}}{1 - \bar\alpha_t} \beta_t$$
 
 $$x_{t - 1} = \tilde{\mu}_t + \sigma_t z$$
 
