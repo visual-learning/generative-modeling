@@ -2,7 +2,7 @@ Please follow the instructions for this part of the assignment in THIS order!
 
 First, download the pre-trained checkpoint from https://drive.google.com/file/d/1gtn9Jv9jBUol7iJw-94hw4j6KfpG3SZE/view?usp=sharing.
 
-Diffusion models have recently become a very popular generative modeling technique. In this assignment, we will experiment with different sampling methods for diffusion models. Diffusion models apply a series of gaussian noise to an input image, and try to denoise these noisy images by predicting the noise at each timestep. For this assignment, we will use the provided pre-trained diffusion model trained on CIFAR-10 and will implement different sampling techniques for model inference. Please refer to Lilian Weng's blog post here: https://lilianweng.github.io/posts/2021-07-11-diffusion-models/ for additional explanation/derivation.
+Diffusion models have recently become a very popular generative modeling technique. In this assignment, we will experiment with different sampling methods for diffusion models. Diffusion models apply a series of gaussian noise to an input image, and try to denoise these noisy images by predicting the noise at each timestep. For this assignment, we will use the provided pre-trained diffusion model trained on CIFAR-10 and will implement different sampling techniques for model inference. Please refer to Lilian Weng's blog post here: https://lilianweng.github.io/posts/2021-07-11-diffusion-models/ for additional explanation/derivation. In this assignment, we are following the notation from Lilian Weng's blogpost. 
 
 Given an input image $x_0$, the forward process sequentially applies a gaussian noise to the image, producing the following conditional distribution:
 $$q(x_t | x_{t-1}) = \mathcal{N}(x_t; \sqrt{1 - \beta_t} x_{t-1}, \beta_t\mathcal{I})$$
@@ -31,7 +31,14 @@ $$\tilde{\mu_t} = \frac{\sqrt{\alpha_t} (1 - \bar{\alpha_{t-1}})}{1 - \bar{\alph
 
 $$\sigma_t^2 = \tilde{\beta_t} = \frac{1 - \bar\alpha_{t - 1}}{1 - \bar\alpha_t} \beta_t$$
 
+$$ x_{t-1} \sim  q(x_{t-1} | x_t, \hat{x_0} ) = \mathcal{N}(x_{t-1}; \tilde{\mu}_t, \sigma_{t} \mathcal{I}) $$
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (Notation: $q(x_{t-1} | x_t, \hat{x_0} )$ denotes the denoising process, which is denoted by $p_{\theta}$ in class.)
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Since this is Gaussian, we can use the reparameterization trick to implement the sampling:
 $$x_{t - 1} = \tilde{\mu}_t + \sigma_t z$$
+
 
 
 The algorithm should then look something like:
@@ -47,6 +54,9 @@ The algorithm should then look something like:
 python inference.py --ckpt epoch_199.pth --sampling-method ddpm
 ```
 
+<hr>
+<hr>
+
 The issue with DDPM is that we need to loop over all the timestamps sequentially, which is not very efficient. Denoising Diffusion Implicit Model (DDIM - [2]) samples a small number of timesteps $S$ from the total timestamps. We can do this sampling evenly across the $[1, T]$ range with a step-size of $\frac{T}{S}$ to get a total of S timesteps $[\tau_1, \tau_2, ..., \tau_{S}]$.
 
 $$ z \sim \mathcal{N}(0, \mathcal{I})$$
@@ -59,8 +69,16 @@ $$\sigma_{\tau_{i}}^2 = \eta \tilde{\beta_{\tau_{i}}}, \hspace{10px} \tilde{\bet
 
 $$ \tilde{\mu_{\tau_i}} = \sqrt{\bar{\alpha_{\tau_{i - 1}}}} \hat{x_0} + \sqrt{1 - \bar{\alpha_{\tau_{i - 1}}} - \sigma_{\tau_{i}}^2} \epsilon_{\tau_{i}}$$
 
-$$ q(x_{\tau_{i - 1}} | x_{\tau_t}, \hat{x_0} ) = \mathcal{N}(x_{\tau_{i-1}}; \tilde{\mu_{\tau_i}}, \sigma_{\tau_i} \mathcal{I}) $$
 $$ x_{\tau_{i-1}} = \tilde{\mu_{\tau_i}} + \sigma_{\tau_i}^2z$$
+
+$$  x_{\tau_{i-1}} \sim  q(x_{\tau_{i - 1}} | x_{\tau_t}, \hat{x_0} ) = \mathcal{N}(x_{\tau_{i-1}}; \tilde{\mu_{\tau_i}}, \sigma_{\tau_i} \mathcal{I})$$ 
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (Notation: $q(x_{\tau_{i - 1}} | x_{\tau_t}, \hat{x_0} )$ denotes the denoising process, which is denoted by $p_{\theta}$ in class.)
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Since this is Gaussian, we can use the reparameterization trick to implement the sampling:
+
+$$x_{\tau_{i-1}} = \tilde{\mu}_{\tau_{i}} + \sigma_{\tau_{i}} z$$
 
 
 
