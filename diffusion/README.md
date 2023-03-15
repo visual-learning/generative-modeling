@@ -57,7 +57,7 @@ $$\sigma_{\tau_{i}}^2 = \eta \tilde{\beta_{\tau_{i}}}, \hspace{10px} \tilde{\bet
 
 <!-- $$q(x_{\tau_{i - 1}} | x_{\tau_t}, x_0) = \mathcal{N}(x_{\tau_{i-1}}; \sqrt{\bar{\alpha_{\tau_{i - 1}}}} x_0 + \sqrt{1 - \bar{\alpha_{\tau_{i - 1}}} - \sigma_{\tau_{i}}^2} \epsilon_{\tau_{i}}; \sigma_{\tau_{i}}^2 \mathcal{I}) $$ -->
 
-$$ \tilde{\mu_{\tau_i}} = \sqrt{\bar{\alpha_{\tau_{i - 1}}}} x_0 + \sqrt{1 - \bar{\alpha_{\tau_{i - 1}}} - \sigma_{\tau_{i}}^2} \epsilon_{\tau_{i}}$$
+$$ \tilde{\mu_{\tau_i}} = \sqrt{\bar{\alpha_{\tau_{i - 1}}}} \hat{x_0} + \sqrt{1 - \bar{\alpha_{\tau_{i - 1}}} - \sigma_{\tau_{i}}^2} \epsilon_{\tau_{i}}$$
 
 $$ q(x_{\tau_{i - 1}} | x_{\tau_t}, \hat{x_0} ) = \mathcal{N}(x_{\tau_{i-1}}; \tilde{\mu_{\tau_i}}, \sigma_{\tau_i} \mathcal{I}) $$
 $$ x_{\tau_{i-1}} = \tilde{\mu_{\tau_i}} + \sigma_{\tau_i}^2z$$
