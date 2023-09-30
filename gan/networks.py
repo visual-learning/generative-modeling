@@ -4,8 +4,6 @@ import torch.nn.functional as F
 
 
 class UpSampleConv2D(torch.jit.ScriptModule):
-    # TODO 1.1: Implement nearest neighbor upsampling + conv layer
-
     def __init__(
         self,
         input_channels,
@@ -15,38 +13,60 @@ class UpSampleConv2D(torch.jit.ScriptModule):
         padding=0,
     ):
         super(UpSampleConv2D, self).__init__()
+        ##################################################################
         # TODO 1.1: Setup the network layers
+        ##################################################################
+        self.conv = None
+        ##################################################################
+        #                          END OF YOUR CODE                      #
+        ##################################################################
 
     @torch.jit.script_method
     def forward(self, x):
+        ##################################################################
         # TODO 1.1: Implement nearest neighbor upsampling
-        # 1. Repeat x channel wise upscale_factor^2 times
-        # 2. Use pixel shuffle (https://pytorch.org/docs/master/generated/torch.nn.PixelShuffle.html#torch.nn.PixelShuffle)
-        # to form a (batch x channel x height*upscale_factor x width*upscale_factor) output
+        # 1. Repeat x channel-wise upscale_factor^2 times
+        # 2. Use torch.nn.PixelShuffle to form an output of dimension
+        # (batch, channel, height*upscale_factor, width*upscale_factor)
         # 3. Apply convolution and return output
+        ##################################################################
+        pass
+        ##################################################################
+        #                          END OF YOUR CODE                      #
+        ##################################################################
 
 
 class DownSampleConv2D(torch.jit.ScriptModule):
-    # TODO 1.1: Implement spatial mean pooling + conv layer
-
     def __init__(
         self, input_channels, kernel_size=3, n_filters=128, downscale_ratio=2, padding=0
     ):
         super(DownSampleConv2D, self).__init__()
+        ##################################################################
         # TODO 1.1: Setup the network layers
-
+        ##################################################################
+        self.conv = None
+        ##################################################################
+        #                          END OF YOUR CODE                      #
+        ##################################################################
 
     @torch.jit.script_method
     def forward(self, x):
+        ##################################################################
         # TODO 1.1: Implement spatial mean pooling
-        # 1. Use pixel unshuffle (https://pytorch.org/docs/master/generated/torch.nn.PixelUnshuffle.html#torch.nn.PixelUnshuffle)
-        # to form a (batch x channel * downscale_factor^2 x height x width) output
-        # 2. Then split channel wise into (downscale_factor^2xbatch x channel x height x width) images
-        # 3. Average across dimension 0, apply convolution and return output
+        # 1. Use torch.nn.PixelUnshuffle to form an output of dimension
+        # (batch, channel, downscale_factor^2, height, width)
+        # 2. Then split channel-wise into
+        # (downscale_factor^2xbatch, channel, height, width) images
+        # 3. Take the average across dimension 0, apply convolution,
+        # and return the output
+        ##################################################################
+        pass
+        ##################################################################
+        #                          END OF YOUR CODE                      #
+        ##################################################################
 
 
 class ResBlockUp(torch.jit.ScriptModule):
-    # TODO 1.1: Impement Residual Block Upsampler.
     """
     ResBlockUp(
         (layers): Sequential(
@@ -66,16 +86,28 @@ class ResBlockUp(torch.jit.ScriptModule):
 
     def __init__(self, input_channels, kernel_size=3, n_filters=128):
         super(ResBlockUp, self).__init__()
+        ##################################################################
         # TODO 1.1: Setup the network layers
+        ##################################################################
+        self.layers = None
+        ##################################################################
+        #                          END OF YOUR CODE                      #
+        ##################################################################
 
     @torch.jit.script_method
     def forward(self, x):
-        # TODO 1.1: Forward through the layers and implement a residual connection.
-        # Make sure to upsample the residual before adding it to the layer output.
+        ##################################################################
+        # TODO 1.1: Forward through the layers and implement a residual
+        # connection. Make sure to upsample the residual before adding it
+        # to the layer output.
+        ##################################################################
+        pass
+        ##################################################################
+        #                          END OF YOUR CODE                      #
+        ##################################################################
 
 
 class ResBlockDown(torch.jit.ScriptModule):
-    # TODO 1.1: Impement Residual Block Downsampler.
     """
     ResBlockDown(
         (layers): Sequential(
@@ -93,16 +125,28 @@ class ResBlockDown(torch.jit.ScriptModule):
     """
     def __init__(self, input_channels, kernel_size=3, n_filters=128):
         super(ResBlockDown, self).__init__()
+        ##################################################################
         # TODO 1.1: Setup the network layers
+        ##################################################################
+        self.layers = None
+        ##################################################################
+        #                          END OF YOUR CODE                      #
+        ##################################################################
 
     @torch.jit.script_method
     def forward(self, x):
-        # TODO 1.1: Forward through self.layers and implement a residual connection.
-        # Make sure to downsample the residual before adding it to the layer output.
+        ##################################################################
+        # TODO 1.1: Forward through the layers and implement a residual
+        # connection. Make sure to downsample the residual before adding
+        # it to the layer output.
+        ##################################################################
+        pass
+        ##################################################################
+        #                          END OF YOUR CODE                      #
+        ##################################################################
 
 
 class ResBlock(torch.jit.ScriptModule):
-    # TODO 1.1: Impement Residual Block as described below.
     """
     ResBlock(
         (layers): Sequential(
@@ -116,15 +160,26 @@ class ResBlock(torch.jit.ScriptModule):
 
     def __init__(self, input_channels, kernel_size=3, n_filters=128):
         super(ResBlock, self).__init__()
+        ##################################################################
         # TODO 1.1: Setup the network layers
+        ##################################################################
+        self.layers = None
+        ##################################################################
+        #                          END OF YOUR CODE                      #
+        ##################################################################
 
     @torch.jit.script_method
     def forward(self, x):
-        # TODO 1.1: Forward the conv layers. Don't forget the residual connection!
-
+        ##################################################################
+        # TODO 1.1: Forward the conv layers. Don't forget the residual
+        # connection!
+        ##################################################################
+        pass
+        ##################################################################
+        #                          END OF YOUR CODE                      #
+        ##################################################################
 
 class Generator(torch.jit.ScriptModule):
-    # TODO 1.1: Impement Generator. Follow the architecture described below:
     """
     Generator(
     (dense): Linear(in_features=128, out_features=2048, bias=True)
@@ -184,20 +239,41 @@ class Generator(torch.jit.ScriptModule):
 
     def __init__(self, starting_image_size=4):
         super(Generator, self).__init__()
-        # TODO 1.1: Setup the network layers
+        ##################################################################
+        # TODO 1.1: Set up the network layers. You should use the modules
+        # you have implemented previously above.
+        ##################################################################
+        self.dense = None
+        self.layers = None
+        ##################################################################
+        #                          END OF YOUR CODE                      #
+        ##################################################################
 
     @torch.jit.script_method
     def forward_given_samples(self, z):
-        # TODO 1.1: forward the generator assuming a set of samples z have been passed in.
-        # Don't forget to re-shape the output of the dense layer into an image with the appropriate size!
+        ##################################################################
+        # TODO 1.1: Forward the generator assuming a set of samples z has
+        # been passed in. Don't forget to re-shape the output of the dense
+        # layer into an image with the appropriate size!
+        ##################################################################
+        pass
+        ##################################################################
+        #                          END OF YOUR CODE                      #
+        ##################################################################
 
     @torch.jit.script_method
     def forward(self, n_samples: int = 1024):
-        # TODO 1.1: Generate n_samples latents and forward through the network.
+        ##################################################################
+        # TODO 1.1: Generate n_samples latents and forward through the
+        # network.
+        ##################################################################
+        pass
+        ##################################################################
+        #                          END OF YOUR CODE                      #
+        ##################################################################
 
 
 class Discriminator(torch.jit.ScriptModule):
-    # TODO 1.1: Impement Discriminator. Follow the architecture described below:
     """
     Discriminator(
     (layers): Sequential(
@@ -251,9 +327,24 @@ class Discriminator(torch.jit.ScriptModule):
 
     def __init__(self):
         super(Discriminator, self).__init__()
-        # TODO 1.1: Setup the network layers
+        ##################################################################
+        # TODO 1.1: Set up the network layers. You should use the modules
+        # you have implemented previously above.
+        ##################################################################
+        self.dense = None
+        self.layers = None
+        ##################################################################
+        #                          END OF YOUR CODE                      #
+        ##################################################################
 
     @torch.jit.script_method
     def forward(self, x):
-        # TODO 1.1: Forward the discriminator assuming a batch of images have been passed in.
-        # Make sure to sum across the image dimensions after passing x through self.layers.
+        ##################################################################
+        # TODO 1.1: Forward the discriminator assuming a batch of images
+        # have been passed in. Make sure to sum across the image
+        # dimensions after passing x through self.layers.
+        ##################################################################
+        pass
+        ##################################################################
+        #                          END OF YOUR CODE                      #
+        ##################################################################
