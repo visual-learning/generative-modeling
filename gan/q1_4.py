@@ -11,17 +11,26 @@ from train import train_model
 def compute_discriminator_loss(
     discrim_real, discrim_fake, discrim_interp, interp, lamb
 ):
-    """
-    TODO 1.4.1: Implement LSGAN loss for discriminator.
-    Do not use discrim_interp, interp, lamb. They are placeholders for Q1.5.
-    """
+    ##################################################################
+    # TODO: 1.4: Implement LSGAN loss for discriminator.
+    # Do not use discrim_interp, interp, lamb. They are placeholders
+    # for Q1.5.
+    ##################################################################
+    loss = None
+    ##################################################################
+    #                          END OF YOUR CODE                      #
+    ##################################################################
     return loss
 
 
 def compute_generator_loss(discrim_fake):
-    """
-    TODO 1.4.1: Implement LSGAN loss for generator.
-    """
+    ##################################################################
+    # TODO: 1.4: Implement LSGAN loss for generator.
+    ##################################################################
+    loss = None
+    ##################################################################
+    #                          END OF YOUR CODE                      #
+    ##################################################################
     return loss
 
 if __name__ == "__main__":
@@ -31,7 +40,6 @@ if __name__ == "__main__":
     prefix = "data_ls_gan/"
     os.makedirs(prefix, exist_ok=True)
 
-    # TODO 1.4.2: Run this line of code.
     train_model(
         gen,
         disc,
