@@ -13,7 +13,7 @@ def compute_discriminator_loss(
     discrim_real, discrim_fake, discrim_interp, interp, lamb
 ):
     ##################################################################
-    # TODO 1.3.1: Implement GAN loss for discriminator.
+    # TODO 1.3: Implement GAN loss for discriminator.
     # Do not use discrim_interp, interp, lamb. They are placeholders
     # for Q1.5.
     ##################################################################
@@ -26,7 +26,7 @@ def compute_discriminator_loss(
 
 def compute_generator_loss(discrim_fake):
     ##################################################################
-    # TODO 1.3.1: Implement GAN loss for the generator.
+    # TODO 1.3: Implement GAN loss for the generator.
     ##################################################################
     loss = None
     ##################################################################
