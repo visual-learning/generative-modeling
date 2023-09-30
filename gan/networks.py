@@ -13,13 +13,10 @@ class UpSampleConv2D(torch.jit.ScriptModule):
         padding=0,
     ):
         super(UpSampleConv2D, self).__init__()
-        ##################################################################
-        # TODO 1.1: Setup the network layers
-        ##################################################################
-        self.conv = None
-        ##################################################################
-        #                          END OF YOUR CODE                      #
-        ##################################################################
+        self.conv = nn.Conv2d(
+            input_channels, n_filters, kernel_size=kernel_size, padding=padding
+        )
+        self.upscale_factor = upscale_factor
 
     @torch.jit.script_method
     def forward(self, x):
@@ -41,13 +38,10 @@ class DownSampleConv2D(torch.jit.ScriptModule):
         self, input_channels, kernel_size=3, n_filters=128, downscale_ratio=2, padding=0
     ):
         super(DownSampleConv2D, self).__init__()
-        ##################################################################
-        # TODO 1.1: Setup the network layers
-        ##################################################################
-        self.conv = None
-        ##################################################################
-        #                          END OF YOUR CODE                      #
-        ##################################################################
+        self.conv = nn.Conv2d(
+            input_channels, n_filters, kernel_size=kernel_size, padding=padding
+        )
+        self.downscale_ratio = downscale_ratio
 
     @torch.jit.script_method
     def forward(self, x):
