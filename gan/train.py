@@ -99,7 +99,7 @@ def train_model(
                 
                 ####################### UPDATE DISCRIMINATOR #####################
                 ##################################################################
-|               # TODO 1.2: compute generator, discriminator, and interpolated outputs
+                # TODO 1.2: compute generator, discriminator, and interpolated outputs
                 # 1. Compute generator output
                 # Note: The number of samples must match the batch size.
                 # 2. Compute discriminator output on the train batch.
@@ -112,7 +112,7 @@ def train_model(
                 ##################################################################
 
                 ##################################################################
-|               # TODO 1.5 Compute the interpolated batch and run the
+                # TODO 1.5 Compute the interpolated batch and run the
                 # discriminator on it.
                 ###################################################################
                 interp = None
@@ -133,7 +133,7 @@ def train_model(
             if iters % 5 == 0:
                 with torch.cuda.amp.autocast(enabled=amp_enabled):
                     ##################################################################
-    |               # TODO 1.2: Compute generator and discriminator output on
+                    # TODO 1.2: Compute generator and discriminator output on
                     # generated data.
                     ###################################################################
                     fake_batch = None
