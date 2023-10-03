@@ -31,7 +31,7 @@ $$\tilde{\mu_t} = \frac{\sqrt{\alpha_t} (1 - \bar{\alpha_{t-1}})}{1 - \bar{\alph
 
 $$\sigma_t^2 = \tilde{\beta_t} = \frac{1 - \bar\alpha_{t - 1}}{1 - \bar\alpha_t} \beta_t$$
 
-$$ x_{t-1} \sim  q(x_{t-1} | x_t, \hat{x_0} ) = \mathcal{N}(x_{t-1}; \tilde{\mu}_t, \sigma_{t} \mathcal{I}) $$
+$$ x_{t-1} \sim  q(x_{t-1} | x_t, \hat{x_0} ) = \mathcal{N}(x_{t-1}; \tilde{\mu_t}, \sigma_{t} \mathcal{I}) $$
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (Notation: $q(x_{t-1} | x_t, \hat{x_0} )$ denotes the denoising process, which is denoted by $p_{\theta}$ in class.)
 
@@ -71,14 +71,14 @@ $$ \tilde{\mu_{\tau_i}} = \sqrt{\bar{\alpha_{\tau_{i - 1}}}} \hat{x_0} + \sqrt{1
 
 $$ x_{\tau_{i-1}} = \tilde{\mu_{\tau_i}} + \sigma_{\tau_i}^2z$$
 
-$$  x_{\tau_{i-1}} \sim  q(x_{\tau_{i - 1}} | x_{\tau_t}, \hat{x_0} ) = \mathcal{N}(x_{\tau_{i-1}}; \tilde{\mu_{\tau_i}}, \sigma_{\tau_i} \mathcal{I})$$ 
+$$x_{\tau_{i-1}} \sim  q(x_{\tau_{i - 1}} | x_{\tau_t}, \hat{x_0} ) = \mathcal{N}(x_{\tau_{i-1}}; \tilde{\mu_{\tau_i}}, \sigma_{\tau_i} \mathcal{I})$$ 
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (Notation: $q(x_{\tau_{i - 1}} | x_{\tau_t}, \hat{x_0} )$ denotes the denoising process, which is denoted by $p_{\theta}$ in class.)
 
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Since this is Gaussian, we can use the reparameterization trick to implement the sampling:
 
-$$x_{\tau_{i-1}} = \tilde{\mu}_{\tau_{i}} + \sigma_{\tau_{i}} z$$
+$$x_{\tau_{i-1}} = \tilde{\mu_{\tau_i}} + \sigma_{\tau_i} z$$
 
 
 
