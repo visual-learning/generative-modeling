@@ -1,5 +1,6 @@
-pip install -r requirements.txt
-mkdir $1/cleanfid/stats/cub_clean_custom_na.npz
+python -m pip install -r requirements.txt
+mkdir $1/cleanfid/
+mkdir $1/cleanfid/stats/
 mkdir -p datasets/
 rm -rf datasets/* # clear directory content
 gdown https://drive.google.com/uc\?id\=1hbzc_P1FuxMkcabkgn9ZKinBwW683j45 -O datasets/
