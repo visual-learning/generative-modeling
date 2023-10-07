@@ -50,7 +50,7 @@ class DownSampleConv2D(torch.jit.ScriptModule):
         # 1. Use torch.nn.PixelUnshuffle to form an output of dimension
         # (batch, channel, downscale_factor^2, height, width)
         # 2. Then split channel-wise into
-        # (downscale_factor^2xbatch, channel, height, width) images
+        # (downscale_factor^2, batch, channel, height, width) images
         # 3. Take the average across dimension 0, apply convolution,
         # and return the output
         ##################################################################
