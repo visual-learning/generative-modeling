@@ -96,11 +96,11 @@ The algorithm for DDIM should then look something like:
 python inference.py --ckpt epoch_199.pth --sampling-method ddim --ddim-timesteps 100 --ddim-eta 0
 ```
 
-*3.3*. Finally, we are going to use the sampling methods above to compute the FID of the diffusion model. Fill out all TODOs in the code corresponding to 3.3 in `model.py` and `inference.py`. Compute FID for DDPM and DDIM using the following commands:
+*3.3*. Finally, we are going to use the sampling methods above to compute the FID of the diffusion model. Fill out all TODOs in the code corresponding to 3.3 in `inference.py`. Compute FID for DDPM and DDIM using the following commands:
 
 ```
-python inference.py --ckpt epoch_199.pth --sampling-method ddpm --compute_fid
-python inference.py --ckpt epoch_199.pth --sampling-method ddim --ddim-timesteps 100 --ddim-eta 0 --compute_fid
+python inference.py --ckpt epoch_199.pth --sampling-method ddpm --compute-fid
+python inference.py --ckpt epoch_199.pth --sampling-method ddim --ddim-timesteps 100 --ddim-eta 0 --compute-fid
 ```
 
 ## Relevant papers:
