@@ -77,6 +77,6 @@ if __name__ == "__main__":
             nrow=10,
         )
         if args.compute_fid:
-            # NOTE: This will take some time to run even though we are only doing 1K samples.
-            score = get_fid(diffusion, "cifar10", 32, 32*32*3, batch_size=256, num_gen=1000)
+            # NOTE: This will take a very long time to run even though we are only doing 10K samples.
+            score = get_fid(diffusion, "cifar10", 32, 32*32*3, batch_size=256, num_gen=10_000)
             print("FID: ", score)
