@@ -87,9 +87,13 @@ class DiffusionModel(nn.Module):
         # noise to predict the additive noise, use the denoising model.
         # Hint: You can use extract function from utils.py. See
         # get_posterior_parameters() for usage examples.
+        # 
         ##################################################################
         pred_noise = None
         x_0 = None
+        
+        # TODO 3.1: Make sure to clamp x_0 between -1 and 1.0
+        
         ##################################################################
         #                          END OF YOUR CODE                      #
         ##################################################################
@@ -133,6 +137,12 @@ class DiffusionModel(nn.Module):
         # sampling process.
         ##################################################################
         # Step 1: Predict x_0 and the additive noise for tau_i
+        
+        # Make tau_isub1 0 , incase it is below 0
+        if tau_isub1 < 0:
+            tau_isub1 = 0        
+
+        
         x_0 = None
 
         # Step 2: Extract \alpha_{\tau_{i - 1}} and \alpha_{\tau_{i}}
