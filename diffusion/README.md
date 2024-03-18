@@ -19,13 +19,14 @@ We know how much noise we have added in the forward process. Therefore, we take 
 
 $$ \epsilon_t = f(x_t, t)$$
 
-By repeating this several times, we can predict the starting image $x_0$.
-$$\hat{x_0} = \frac{1}{\sqrt{\bar{\alpha_t}}} (x_t - \sqrt{1 - \bar{\alpha_t}} \epsilon_t)$$
+By repeating the below set of equations for multiple timesteps, we can predict the starting image $x_0$.
 
 
 To run inference using Denoising Diffusion Probabilistic Models (DDPM - [1]), we first sample a random noise vector $x_T$ and apply the denoising process repeatedly with the equations below to generate $x_0$.
 
 $$ z \sim \mathcal{N}(0, \mathcal{I})$$
+
+$$\hat{x_0} = \frac{1}{\sqrt{\bar{\alpha_t}}} (x_t - \sqrt{1 - \bar{\alpha_t}} \epsilon_t)$$
 
 $$\tilde{\mu_t} = \frac{\sqrt{\alpha_t} (1 - \bar{\alpha_{t-1}})}{1 - \bar{\alpha_t}} x_t + \frac{\sqrt{\bar{\alpha_{t-1}}}\beta_t}{1 - \bar{\alpha_t}} \hat{x_0}$$
 
@@ -61,7 +62,7 @@ The issue with DDPM is that we need to loop over all the timestamps sequentially
 
 $$ z \sim \mathcal{N}(0, \mathcal{I})$$
 
-$$\hat{x_0} = \frac{1}{\sqrt{\bar{\alpha_{\tau_{i}}}}} (x_{\tau_{i}} - \sqrt{1 - \bar{\alpha_t}} \epsilon_t)$$
+$$\hat{x_0} = \frac{1}{\sqrt{\bar{\alpha_{\tau_{i}}}}} (x_{\tau_{i}} - \sqrt{1 - \bar{\alpha_{\tau_{i}}}} \epsilon_{\tau_{i}})$$
 
 $$\sigma_{\tau_{i}}^2 = \eta \tilde{\beta_{\tau_{i}}}, \hspace{10px} \tilde{\beta_{\tau_{i}}} = \frac{1 - \bar{\alpha_{\tau_{i - 1}}}}{1 - \bar\alpha_{\tau_{i}}} \beta_{\tau_{i - 1}}$$
 
@@ -69,7 +70,7 @@ $$\sigma_{\tau_{i}}^2 = \eta \tilde{\beta_{\tau_{i}}}, \hspace{10px} \tilde{\bet
 
 $$ \tilde{\mu_{\tau_i}} = \sqrt{\bar{\alpha_{\tau_{i - 1}}}} \hat{x_0} + \sqrt{1 - \bar{\alpha_{\tau_{i - 1}}} - \sigma_{\tau_{i}}^2} \epsilon_{\tau_{i}}$$
 
-$$ x_{\tau_{i-1}} = \tilde{\mu_{\tau_i}} + \sigma_{\tau_i}^2z$$
+$$ x_{\tau_{i-1}} = \tilde{\mu_{\tau_i}} + \sigma_{\tau_i} z$$
 
 $$x_{\tau_{i-1}} \sim  q(x_{\tau_{i - 1}} | x_{\tau_t}, \hat{x_0} ) = \mathcal{N}(x_{\tau_{i-1}}; \tilde{\mu_{\tau_i}}, \sigma_{\tau_i} \mathcal{I})$$ 
 
