@@ -27,6 +27,10 @@ class UpSampleConv2D(torch.jit.ScriptModule):
         # (batch, channel, height*upscale_factor, width*upscale_factor)
         # 3. Apply convolution and return output
         ##################################################################
+        x = x.repeat([1,self.upscale_factor**2,1,1])
+        shuf = torch.nn.PixelShuffle(upscale_factor=self.upscale_factor)
+        out = shuf(x)
+        return self.conv(out)
         pass
         ##################################################################
         #                          END OF YOUR CODE                      #
@@ -54,6 +58,15 @@ class DownSampleConv2D(torch.jit.ScriptModule):
         # 3. Take the average across dimension 0, apply convolution,
         # and return the output
         ##################################################################
+        downshuf = torch.nn.PixelUnshuffle(downscale_factor=self.downscale_ratio)
+        out = downshuf(x)
+        B,C_rr,H,W = out.shape
+        C = C_rr // self.downscale_ratio
+        out = out.view(B, self.downscale_ratio**2, C, H, W)
+        out = torch.permute(out, (1, 0, 2, 3, 4))
+        out = torch.mean(out, dim=0)
+        out = self.conv(out)
+        return out
         pass
         ##################################################################
         #                          END OF YOUR CODE                      #
@@ -83,7 +96,15 @@ class ResBlockUp(torch.jit.ScriptModule):
         ##################################################################
         # TODO 1.1: Setup the network layers
         ##################################################################
-        self.layers = None
+        self.upsample_residual = UpSampleConv2D(input_channels, n_filters, kernel_size)
+        self.layers = torch.nn.Sequential(
+                torch.nn.BatchNorm2d(input_channels), # apparently I need to tell it how many channels there are
+                torch.nn.ReLU(),
+                torch.nn.Conv2d(input_channels, n_filters, kernel_size, bias=False, padding=1),
+                torch.nn.BatchNorm2d(n_filters),
+                torch.nn.ReLU(),
+                UpSampleConv2D(input_channels=n_filters, n_filters=n_filters),
+                )
         ##################################################################
         #                          END OF YOUR CODE                      #
         ##################################################################
@@ -95,7 +116,17 @@ class ResBlockUp(torch.jit.ScriptModule):
         # connection. Make sure to upsample the residual before adding it
         # to the layer output.
         ##################################################################
-        pass
+        # aha I see: this is a res block, so the input needs to be added
+        # to the output:
+        # this is a clever idea: to make a residual connection a block,
+        # so you can just add res connections as blocks in later layers
+        # and they even give me a helpful upsample_residual thing (wait, can I even use it?)
+        # I think this block assumes a conv layer. 
+        out = self.layers(x)
+        in_upsampled = self.up_sample_residual(x) # I NEED the conv2d for the res connection
+                                                    # because out had n_filters # of channels,
+                                                    # whereas x has input_channels
+        return out + in_upsampled
         ##################################################################
         #                          END OF YOUR CODE                      #
         ##################################################################
@@ -122,7 +153,17 @@ class ResBlockDown(torch.jit.ScriptModule):
         ##################################################################
         # TODO 1.1: Setup the network layers
         ##################################################################
-        self.layers = None
+        self.downsample_residual = DownSampleConv2D(input_channels=n_filters,
+                                                    n_filters=n_filters,
+                                                    kernel_size=1,
+                                                    padding=1
+                                                    )
+        self.layers = torch.nn.Sequential(
+                torch.nn.ReLU(),
+                torch.nn.Conv2d(input_channels, n_filters, kernel_size, padding=1),
+                torch.nn.ReLU(),
+                DownSampleConv2D(input_channels=n_filters, n_filters=n_filters,),
+                )
         ##################################################################
         #                          END OF YOUR CODE                      #
         ##################################################################
@@ -134,7 +175,8 @@ class ResBlockDown(torch.jit.ScriptModule):
         # connection. Make sure to downsample the residual before adding
         # it to the layer output.
         ##################################################################
-        pass
+        out = self.layers(x)
+        return out + self.down_sample_residual(x)
         ##################################################################
         #                          END OF YOUR CODE                      #
         ##################################################################
@@ -157,7 +199,15 @@ class ResBlock(torch.jit.ScriptModule):
         ##################################################################
         # TODO 1.1: Setup the network layers
         ##################################################################
-        self.layers = None
+        self.layers = torch.nn.Sequential(
+                torch.nn.ReLU(), # how come there aren't any batch norms here?
+                torch.nn.Conv2d(input_channels, n_filters, kernel_size, padding=1),
+                torch.nn.ReLU(),
+                torch.nn.Conv2d(n_filters, n_filters, kernel_size, padding=1)
+                )
+        self.reduce_channels = torch.nn.Conv2d(input_channels, n_filters, kernel_size=1)
+        # dimension check: if the input is (C1, H, W) and we have a kernel size of (3,3) and padding 1:
+        # we'll have an output shape of :  (C2, H, W): we have equivalent shapes.
         ##################################################################
         #                          END OF YOUR CODE                      #
         ##################################################################
@@ -168,7 +218,8 @@ class ResBlock(torch.jit.ScriptModule):
         # TODO 1.1: Forward the conv layers. Don't forget the residual
         # connection!
         ##################################################################
-        pass
+        out = self.layers(x)
+        return out + self.reduce_channels(x)
         ##################################################################
         #                          END OF YOUR CODE                      #
         ##################################################################
@@ -237,8 +288,11 @@ class Generator(torch.jit.ScriptModule):
         # TODO 1.1: Set up the network layers. You should use the modules
         # you have implemented previously above.
         ##################################################################
-        self.dense = None
-        self.layers = None
+        self.dense = torch.nn.Linear(128, 2048)
+        self.layers = torch.nn.Sequential(
+                ResBlockUp(input_channels=128, n_filters=128)
+                # ah don't read the wrong layer of indent. A resblock up goes here.
+                # don't I have to reshape the noise?
         ##################################################################
         #                          END OF YOUR CODE                      #
         ##################################################################

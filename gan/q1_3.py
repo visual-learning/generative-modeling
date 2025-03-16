@@ -1,7 +1,6 @@
 import argparse
 import os
 from utils import get_args
-
 import torch
 
 from networks import Discriminator, Generator
