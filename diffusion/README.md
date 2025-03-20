@@ -64,7 +64,7 @@ $$ z \sim \mathcal{N}(0, \mathcal{I})$$
 
 $$\hat{x_0} = \frac{1}{\sqrt{\bar{\alpha_{\tau_{i}}}}} (x_{\tau_{i}} - \sqrt{1 - \bar{\alpha_{\tau_{i}}}} \epsilon_{\tau_{i}})$$
 
-$$\sigma_{\tau_{i}}^2 = \eta \tilde{\beta_{\tau_{i}}}, \hspace{10px} \tilde{\beta_{\tau_{i}}} = \frac{1 - \bar{\alpha_{\tau_{i - 1}}}}{1 - \bar\alpha_{\tau_{i}}} \beta_{\tau_{i - 1}}$$
+$$\sigma_{\tau_{i}}^2 = \eta \tilde{\beta_{\tau_{i}}}, \hspace{10px} \tilde{\beta_{\tau_{i}}} = \frac{1 - \bar{\alpha_{\tau_{i - 1}}}}{1 - \bar\alpha_{\tau_{i}}} \beta_{\tau_{i}}$$
 
 <!-- $$q(x_{\tau_{i - 1}} | x_{\tau_t}, x_0) = \mathcal{N}(x_{\tau_{i-1}}; \sqrt{\bar{\alpha_{\tau_{i - 1}}}} x_0 + \sqrt{1 - \bar{\alpha_{\tau_{i - 1}}} - \sigma_{\tau_{i}}^2} \epsilon_{\tau_{i}}; \sigma_{\tau_{i}}^2 \mathcal{I}) $$ -->
 
