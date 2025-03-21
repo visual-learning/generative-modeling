@@ -28,8 +28,8 @@ def get_optimizers_and_schedulers(gen, disc):
     # The learning rate for the generator should be decayed to 0 over
     # 100K iterations.
     ##################################################################
-    scheduler_discriminator = None
-    scheduler_generator = None
+    scheduler_discriminator = torch.optim.lr_scheduler.CosineAnnealingLR(optim_discriminator, 500000)# what are the schedulers that the later gan papers used?
+    scheduler_generator = torch.optim.lr_scheduler.CosineAnnealingLR(optim_generator, 100000)
     ##################################################################
     #                          END OF YOUR CODE                      #
     ##################################################################
